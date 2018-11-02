@@ -1,5 +1,4 @@
 #!/usr/bin/tclsh
-set lineNumber 0
 set output {110000000000,,北京市
 120000000000,,天津市
 130000000000,,河北省
