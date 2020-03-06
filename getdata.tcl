@@ -10,6 +10,7 @@ set baseurl {http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/}
 
 # $year/index.html
 sqlite3 db {tjqh.db}
+db timeout 3000
 db eval {BEGIN}
 db eval {CREATE TABLE IF NOT EXISTS links(url TEXT PRIMARY KEY, status TEXT)}
 db eval {CREATE TABLE IF NOT EXISTS tjqh
