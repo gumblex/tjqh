@@ -1,9 +1,9 @@
 #!/bin/bash
-mkdir data
-for year in $(seq 2009 2018); do
+mkdir -p data
+for year in $(seq 2009 2019); do
 if [ -s data/$year.csv ]; then continue; fi
 wget -e robots=off --mirror --page-requisites --no-parent --convert-links \
-  --tries=10 --retry-on-http-error=400,429,500,504 --compression=auto \
+  --tries=10 --retry-on-http-error=400,429,500,502,504 --compression=auto \
   --directory-prefix=statgov_tjqh \
   http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/$year/index.html
 find statgov_tjqh/www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/$year \
