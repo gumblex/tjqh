@@ -14,7 +14,7 @@ db timeout 3000
 db eval {BEGIN}
 db eval {CREATE TABLE IF NOT EXISTS links(url TEXT PRIMARY KEY, status TEXT)}
 db eval {CREATE TABLE IF NOT EXISTS tjqh
-    (year INTEGER, code INTEGER, category TEXT, name TEXT, PRIMARY KEY(year, code))}
+    (year INTEGER, code INTEGER, category TEXT, name TEXT, PRIMARY KEY(code, year))}
 
 for {set year $startyear} {$year <= $endyear} {incr year} {
     set path "$year/index.html"
@@ -114,6 +114,22 @@ while {1} {
 }
 
 if {![file isdirectory data]} {file mkdir data}
+
+# manually fix encoding problems
+db eval {
+    BEGIN;
+    UPDATE tjqh SET name='青㭎村村民委员会' WHERE code=510681114209;
+    UPDATE tjqh SET name='青㭎村民委员会' WHERE year>=2010 AND code=511525206205;
+    UPDATE tjqh SET name='青㭎村民委员会' WHERE year=2012 AND code=510824223219;
+    UPDATE tjqh SET name='八村委会' WHERE year IN (2014, 2015) AND code=140428202233;
+    UPDATE tjqh SET name='大青㭎村委会' WHERE year BETWEEN 2015 AND 2018 AND code=500153108200;
+    UPDATE tjqh SET name='桴㯊乡' WHERE year=2015 AND code=520324206000;
+    UPDATE tjqh SET name='高社区居委会' WHERE year BETWEEN 2016 AND 2019 AND code=420684103005;
+    UPDATE tjqh SET name='青㭎村民委员会' WHERE year=2016 AND code=511525206205;
+    UPDATE tjqh SET name='桴㯊镇' WHERE year=2016 AND code=520324116000;
+    UPDATE tjqh SET name='大青㭎村村民委员会' WHERE year=2019 AND code=500153108200;
+    COMMIT;
+}
 
 for {set year $startyear} {$year <= $endyear} {incr year} {
     set filename "data/$year.csv"
