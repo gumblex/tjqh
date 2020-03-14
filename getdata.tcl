@@ -31,11 +31,11 @@ proc mergeurl {base new} {
 set trclass {citytr countytr towntr}
 set trheadclass {cityhead countyhead townhead villagehead}
 
-set urlpath /
-while {$urlpath ne ""} {
+while {1} {
     set urlpath [db eval {
         SELECT url FROM links WHERE status IS NULL ORDER BY random() LIMIT 1
     }]
+    if {$urlpath eq ""} {break}
     set year [lindex [split $urlpath /] 0]
     set token [::http::geturl $baseurl$urlpath -timeout 5000]
     set status [::http::status $token]
@@ -124,7 +124,7 @@ for {set year $startyear} {$year <= $endyear} {incr year} {
         SELECT code, category, name FROM tjqh WHERE year=$year
         ORDER BY year, code
     } values {
-        puts "$values(code),$values(category),$values(name)"
+        puts $fp "$values(code),$values(category),$values(name)"
     }
     close $fp
 }
