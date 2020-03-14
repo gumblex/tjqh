@@ -29,6 +29,7 @@ proc mergeurl {base new} {
 }
 
 set trclass {citytr countytr towntr}
+set trheadclass {cityhead countyhead townhead villagehead}
 
 set urlpath /
 while {$urlpath ne ""} {
@@ -45,8 +46,11 @@ while {$urlpath ne ""} {
     }
     set ncode [::http::ncode $token]
     if {$ncode != 200} {
-        puts "$status $urlpath"
+        puts "$ncode $urlpath"
         ::http::cleanup $token
+        if {$ncode == 404} {
+            db eval {UPDATE links SET status=404 WHERE url=$urlpath}
+        }
         continue
     }
     set data [::http::data $token]
@@ -96,6 +100,8 @@ while {$urlpath ne ""} {
             set category [lindex $columns 1]
             set name [lindex $columns 2]
             db eval {INSERT OR IGNORE INTO tjqh VALUES ($year,$code,$category,$name)}
+        } elseif {[lsearch $trheadclass $trtype] > -1} {
+            set trtype [format "%str" [string range $trtype 0 end-4]]
         } else {continue}
         set nodetype $trtype
     }
