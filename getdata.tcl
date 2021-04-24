@@ -5,7 +5,7 @@ package require sqlite3
 set ::http::defaultCharset cp936
 
 set startyear 2009
-set endyear 2019
+set endyear 2020
 set baseurl {http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/}
 
 # $year/index.html
