@@ -144,3 +144,5 @@ for {set year $startyear} {$year <= $endyear} {incr year} {
     }
     close $fp
 }
+
+db close
