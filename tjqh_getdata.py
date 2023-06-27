@@ -14,7 +14,7 @@ except ImportError:
     from requests import Session as Client
 
 
-BASEURL = 'http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/'
+BASEURL = 'http://www.stats.gov.cn/sj/tjbz/tjyqhdmhcxhfdm/'
 SESSION = Client()
 
 re_href = re.compile(r'(\d+).*\.html')
@@ -337,7 +337,7 @@ def fix_names(db):
     print("Fixed %d names." % fix_count)
 
 
-def main(dbname, startyear=2009, endyear=2021):
+def main(dbname, startyear=2009, endyear=2022):
     db = init_db(dbname, startyear, endyear)
     cur = db.cursor()
     while True:
