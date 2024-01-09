@@ -14,8 +14,12 @@ except ImportError:
     from requests import Session as Client
 
 
-BASEURL = 'http://www.stats.gov.cn/sj/tjbz/tjyqhdmhcxhfdm/'
-SESSION = Client()
+BASEURL = 'https://www.stats.gov.cn/sj/tjbz/tjyqhdmhcxhfdm/'
+SESSION = Client(headers={
+    "Accept": "image/avif,image/webp,*/*",
+    "Accept-Language": "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0",
+})
 
 re_href = re.compile(r'(\d+).*\.html')
 
@@ -183,7 +187,7 @@ PUA_MAPPING = str.maketrans({
 
 
 def init_db(filename, startyear=2009, endyear=2021):
-    db = sqlite3.connect(filename, isolation_level=None)
+    db = sqlite3.connect(filename, timeout=60, isolation_level=None)
     db.execute('BEGIN')
     db.execute('CREATE TABLE IF NOT EXISTS links('
         'url TEXT PRIMARY KEY, status TEXT)')
@@ -261,6 +265,8 @@ def get_link(db, urlpath):
         nodetype = trtype
     if nodetype:
         cur.execute("UPDATE links SET status=? WHERE url=?", (nodetype, urlpath))
+    else:
+        print(soup)
     cur.execute("COMMIT")
     print(nodetype, urlpath)
 
@@ -337,7 +343,7 @@ def fix_names(db):
     print("Fixed %d names." % fix_count)
 
 
-def main(dbname, startyear=2009, endyear=2022):
+def main(dbname, startyear=2009, endyear=2023):
     db = init_db(dbname, startyear, endyear)
     cur = db.cursor()
     while True:
